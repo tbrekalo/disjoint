@@ -1,0 +1,22 @@
+[project]
+name = 'disjoint'
+version = '0.1.0'
+requires-python = '>=3.11'
+dependencies = [
+	'ipython>=8.17',
+	'matplotlib>=3.8',
+	'numpy>=1.26',
+	'seaborn>=0.13'
+]
+
+[project.optional-dependencies]
+dev = [
+	'black',
+	'isort',
+	'pyre-check',
+	'pyright',
+	'ruff-lsp',
+]
+
+[tool.black]
+line-length = 79
