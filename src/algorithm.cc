@@ -2,6 +2,6 @@
 
 namespace tb {
 
-auto foo() -> int { return 42; }
+auto binary_split(std::vector<subset>) -> std::vector<subset> { return {}; }
 
 }  // namespace tb
