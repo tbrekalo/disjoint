@@ -24,7 +24,6 @@ if(NOT nanobench_FOUND)
   list(APPEND DISJOINT_FETCH_TARGETS nanobench)
 endif()
 
-message(STATUS ${DISJOINT_FETCH_TARGETS})
 FetchContent_MakeAvailable(${DISJOINT_FETCH_TARGETS})
 add_executable(disjoint-test ${CMAKE_CURRENT_LIST_DIR}/src/main.cc)
 target_link_libraries(disjoint-test PRIVATE disjoint doctest::doctest nanobench)

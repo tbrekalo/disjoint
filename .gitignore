@@ -92,3 +92,5 @@ var/
 venv.bak/
 venv/
 wheels/
+build-debug
+build-relwithdebinfo

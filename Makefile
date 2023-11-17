@@ -36,7 +36,7 @@ clean-debug:
 build-relwithdebinfo:
 	cmake -B ./build-relwithdebinfo -DCMAKE_BUILD_TYPE=RelWithDebInfo -G $(GEN)
 
-relwithdebinfo:
+relwithdebinfo: build-relwithdebinfo
 	cmake --build build-relwithdebinfo
 
 clean-relwithdebinfo:
@@ -52,8 +52,8 @@ release: build
 clean-release:
 	rm -rf ./build
 
-all: debug relwithdebinfo release
+all: debug relwithdebinfo release venv-dev
 	@:
 
-clean: clean-debug clean-relwithdebinfo clean-release
+clean: clean-debug clean-relwithdebinfo clean-release clean-venv
 	@:
