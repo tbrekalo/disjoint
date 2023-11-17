@@ -2,6 +2,11 @@
 
 namespace tb {
 
-auto binary_split(std::vector<subset>) -> std::vector<subset> { return {}; }
+auto unique(std::vector<subset> subsets) -> std::vector<subset> {
+  std::ranges::sort(subsets);
+  subsets.erase(std::ranges::unique(subsets).begin(), subsets.end());
+
+  return subsets;
+}
 
 }  // namespace tb

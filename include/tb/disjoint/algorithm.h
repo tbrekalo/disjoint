@@ -36,6 +36,7 @@ class subset {
   constexpr auto clear() noexcept -> void { std::ranges::fill(state_, 0); }
 };
 
-auto binary_split(std::vector<subset>) -> std::vector<subset>;
+// Returns a vector of unique subsets.
+auto unique(std::vector<subset> subsets) -> std::vector<subset>;
 
 }  // namespace tb
