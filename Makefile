@@ -24,7 +24,8 @@ venv-dev: venv
 clean-venv:
 	rm -rf ./venv
 
-build-debug:
+build-debug: venv
+	source ./venv/bin/activate && \
 	cmake -B ./build-debug -DCMAKE_BUILD_TYPE=Debug -G $(GEN)
 
 debug: build-debug
@@ -33,7 +34,8 @@ debug: build-debug
 clean-debug:
 	rm -rf ./build-debug
 
-build-relwithdebinfo:
+build-relwithdebinfo: venv
+	source ./venv/bin/activate && \
 	cmake -B ./build-relwithdebinfo -DCMAKE_BUILD_TYPE=RelWithDebInfo -G $(GEN)
 
 relwithdebinfo: build-relwithdebinfo
@@ -42,7 +44,8 @@ relwithdebinfo: build-relwithdebinfo
 clean-relwithdebinfo:
 	rm -rf ./build-relwithdebinfo
 
-build:
+build: venv
+	source ./venv/bin/activate && \
 	cmake -B ./build -DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_EXPORT_COMPILE_COMMANDS=1 -G $(GEN)
 
@@ -52,7 +55,7 @@ release: build
 clean-release:
 	rm -rf ./build
 
-all: debug relwithdebinfo release venv-dev
+all: venv-dev debug relwithdebinfo release
 	@:
 
 clean: clean-debug clean-relwithdebinfo clean-release clean-venv
