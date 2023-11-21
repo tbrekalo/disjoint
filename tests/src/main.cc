@@ -6,6 +6,22 @@
 #include "doctest/doctest.h"
 #include "tb/disjoint/algorithm.h"
 
+static auto create_min_sample() {
+  static constexpr auto SUBSET_SIZE = 10uz;
+  auto initilize_subset = [](auto... indices) constexpr -> tb::subset {
+    auto dst = tb::subset(SUBSET_SIZE);
+    (dst.insert(indices), ...);
+
+    return dst;
+  };
+
+  return std::vector<tb::subset>{
+      initilize_subset(1, 3, 7),
+      initilize_subset(1, 3, 5),
+      initilize_subset(0, 2, 4),
+  };
+}
+
 TEST_CASE("subset") {
   SUBCASE("zero-sized") { REQUIRE_EQ(tb::subset{}.size(), 0uz); }
 
@@ -76,32 +92,20 @@ TEST_CASE("subset") {
 }
 
 TEST_CASE("unique") {
-  static constexpr auto SUBSET_SIZE = 10uz;
-  auto initilize_subset = [](auto... indices) constexpr -> tb::subset {
-    auto dst = tb::subset(SUBSET_SIZE);
-    (dst.insert(indices), ...);
+  static auto UNIQUE_SUBSETS = create_min_sample();
 
-    return dst;
-  };
-
-  static auto const UNIQUE_SUBSETS = std::vector<tb::subset>{
-      initilize_subset(1, 3, 7),
-      initilize_subset(1, 3, 5),
-      initilize_subset(0, 2, 4),
-  };
-
-  REQUIRE_EQ(UNIQUE_SUBSETS.size(), 3uz);
-
-  auto const create_subsets = [] {
+  auto const create_subsets = [](std::size_t n_repeats) {
     auto dst = std::vector<tb::subset>{};
-    for (auto _ : std::views::iota(0uz, 4uz)) {
+    for (auto _ : std::views::iota(0uz, n_repeats)) {
       dst.insert(dst.end(), UNIQUE_SUBSETS.begin(), UNIQUE_SUBSETS.end());
     }
 
     return dst;
   };
 
-  auto subsets = create_subsets();
-  REQUIRE_EQ(subsets.size(), 12uz);
-  REQUIRE_EQ(tb::unique(subsets).size(), 3uz);
+  static auto constexpr N_REPEATS = 4uz;
+
+  auto subsets = create_subsets(N_REPEATS);
+  REQUIRE_EQ(subsets.size(), N_REPEATS * UNIQUE_SUBSETS.size());
+  REQUIRE_EQ(tb::unique(subsets).size(), UNIQUE_SUBSETS.size());
 }
