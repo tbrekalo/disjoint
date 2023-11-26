@@ -30,6 +30,9 @@ class subset {
     return state_[idx];
   }
   constexpr auto size() const noexcept -> std::size_t { return state_.size(); }
+  constexpr auto data() const noexcept -> std::uint8_t const* {
+    return state_.data();
+  }
 
   constexpr auto insert(std::size_t idx) noexcept -> void { state_[idx] = 1; }
   constexpr auto erase(std::size_t idx) noexcept -> void { state_[idx] = 0; }
