@@ -91,7 +91,9 @@ TEST_CASE("subset") {
   }
 }
 
-TEST_CASE("unique") {
+TEST_CASE_TEMPLATE("unique", T, decltype(tb::unique),
+                   decltype(tb::unique_binary)) {
+  static constexpr auto unique_algo = T{};
   static auto UNIQUE_SUBSETS = create_min_sample();
 
   auto const create_subsets = [](std::size_t n_repeats) {
@@ -107,5 +109,5 @@ TEST_CASE("unique") {
 
   auto subsets = create_subsets(N_REPEATS);
   REQUIRE_EQ(subsets.size(), N_REPEATS * UNIQUE_SUBSETS.size());
-  REQUIRE_EQ(tb::unique(subsets).size(), UNIQUE_SUBSETS.size());
+  REQUIRE_EQ(unique_algo(subsets).size(), UNIQUE_SUBSETS.size());
 }

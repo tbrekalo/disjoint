@@ -44,6 +44,17 @@ NB_MODULE(dispy, m) {
   m.def("create_subsets", &create_subsets,
         "Creates an array of dispy.subset objects from ndarray object.");
 
-  m.def("unique", tb::unique,
-        "Finds unique subsets in an array of dispy.Subset objects.");
+  m.def(
+      "unique",
+      [](std::vector<tb::subset> subsets) -> std::vector<tb::subset> {
+        return tb::unique(std::move(subsets));
+      },
+      "Finds unique subsets in an array of dispy.Subset objects.");
+
+  m.def(
+      "unique_binary",
+      [](std::vector<tb::subset> subsets) -> std::vector<tb::subset> {
+        return tb::unique_binary(std::move(subsets));
+      },
+      "Finds unique subsets in an array of dispy.Subset objects.");
 }
