@@ -6,9 +6,29 @@ project(
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+add_link_options("-fuse-ld=lld")
+
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+
+include(FetchContent)
+set(DISJOINT_FETCH_TARGETS "")
+
+find_package(unordered_dense 4.1 QUIET)
+if(NOT unordered_dense_FOUND)
+  FetchContent_Declare(
+    unordered_dense
+    GIT_REPOSITORY git@github.com:martinus/unordered_dense.git
+    GIT_TAG v4.1.2
+    GIT_SHALLOW TRUE)
+
+  list(APPEND DISJOINT_FETCH_TARGETS unordered_dense)
+endif()
+
+FetchContent_MakeAvailable(${DISJOINT_FETCH_TARGETS})
 
 add_library(disjoint src/algorithm.cc src/subset.cc)
 target_include_directories(disjoint PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
+target_link_libraries(disjoint PUBLIC unordered_dense::unordered_dense)
 target_compile_options(
   disjoint
   PRIVATE -Wall
