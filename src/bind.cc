@@ -45,6 +45,13 @@ NB_MODULE(dispy, m) {
         "Creates an array of dispy.subset objects from ndarray object.");
 
   m.def(
+      "copy",
+      [](std::vector<tb::subset> subsets) -> std::vector<tb::subset> {
+        return subsets;
+      },
+      "Copy the vector of subsets");
+
+  m.def(
       "unique",
       [](std::vector<tb::subset> subsets) -> std::vector<tb::subset> {
         return tb::unique(std::move(subsets));
