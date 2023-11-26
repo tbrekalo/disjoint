@@ -64,4 +64,11 @@ NB_MODULE(dispy, m) {
         return tb::unique_binary(std::move(subsets));
       },
       "Finds unique subsets in an array of dispy.Subset objects.");
+
+  m.def(
+      "unique_ankerl",
+      [](std::vector<tb::subset> subset) -> std::vector<tb::subset> {
+        return tb::unique_ankerl(std::move(subset));
+      },
+      "Finds unique subsets in an array of dispy.Subset objects.");
 }

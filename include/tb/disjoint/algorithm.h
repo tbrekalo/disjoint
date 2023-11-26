@@ -4,18 +4,29 @@
 #include <ranges>
 #include <span>
 
+#include "ankerl/unordered_dense.h"
 #include "tb/disjoint/subset.h"
-
-namespace tb {
-
-namespace detail {
+namespace tb::detail {
 
 struct subset_group_id {
   std::size_t subset_idx;
   std::size_t group_id;
 };
 
-}  // namespace detail
+
+}  // namespace tb::detail
+
+template <>
+struct ankerl::unordered_dense::hash<tb::subset> {
+  using is_avalanching = void;
+  [[nodiscard]] static auto operator()(tb::subset const& subset) noexcept
+      -> std::uint64_t {
+    return detail::wyhash::hash(
+        subset.data(), subset.size() * sizeof(decltype(*subset.data())));
+  }
+};
+
+namespace tb {
 
 inline constexpr struct unique_t {
   // Returns a vector of unique subsets.
@@ -97,4 +108,21 @@ inline constexpr struct unique_binary_t {
     return dst;
   }
 } const unique_binary;
+
+inline constexpr struct unique_ankerl_t {
+  static auto operator()(std::vector<tb::subset> subsets)
+      -> std::vector<subset> {
+    if (subsets.empty()) {
+      return {};
+    }
+
+    ankerl::unordered_dense::set<tb::subset> subsets_set(
+        std::make_move_iterator(subsets.begin()),
+        std::make_move_iterator(subsets.end()));
+
+    return std::vector<tb::subset>(std::make_move_iterator(subsets_set.begin()),
+                                   std::make_move_iterator(subsets_set.end()));
+  }
+} unique_ankerl;
+
 }  // namespace tb
