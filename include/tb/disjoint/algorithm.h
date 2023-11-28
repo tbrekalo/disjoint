@@ -13,7 +13,6 @@ struct subset_group_id {
   std::size_t group_id;
 };
 
-
 }  // namespace tb::detail
 
 template <>
@@ -31,8 +30,8 @@ namespace tb {
 inline constexpr struct unique_t {
   // Returns a vector of unique subsets.
   //
-  // The implementation is M * N * log(N) where M is the size of a subset and N
-  // is the number of subses.
+  // The implementation is O(M * N * log(N)) where M is the size of a subset and
+  // N is the number of subses.
   static auto operator()(std::vector<subset> subsets) -> std::vector<subset> {
     std::ranges::sort(subsets);
     subsets.erase(std::ranges::unique(subsets).begin(), subsets.end());
@@ -44,8 +43,8 @@ inline constexpr struct unique_t {
 inline constexpr struct unique_binary_t {
   // Returns a vector of unique subsets.
   //
-  // The implementation is M * N * log(N) where M is the size of a subset and N
-  // is the number of subsets.
+  // The implementation is O(M * N * log(N)) where M is the size of a subset and
+  // N is the number of subsets.
   static auto operator()(std::vector<subset> subsets) -> std::vector<subset> {
     if (subsets.empty()) {
       return subsets;
@@ -110,6 +109,10 @@ inline constexpr struct unique_binary_t {
 } const unique_binary;
 
 inline constexpr struct unique_ankerl_t {
+  // Returns a vector of unique subsets.
+  //
+  // The implementation is O(M * N) where M is the size of a subset and N
+  // is the number of subses.
   static auto operator()(std::vector<tb::subset> subsets)
       -> std::vector<subset> {
     if (subsets.empty()) {
