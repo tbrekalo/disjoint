@@ -1,5 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+#include <algorithm>
 #include <array>
 #include <ranges>
 
@@ -15,11 +16,14 @@ static auto create_min_sample() {
     return dst;
   };
 
-  return std::vector<tb::subset>{
+  auto ret = std::vector<tb::subset>{
       initilize_subset(1, 3, 7),
       initilize_subset(1, 3, 5),
       initilize_subset(0, 2, 4),
   };
+
+  std::ranges::sort(ret);
+  return ret;
 }
 
 TEST_CASE("subset") {
@@ -92,7 +96,7 @@ TEST_CASE("subset") {
 }
 
 TEST_CASE_TEMPLATE("unique", T, decltype(tb::unique),
-                   decltype(tb::unique_binary)) {
+                   decltype(tb::unique_binary), decltype(tb::unique_ankerl)) {
   static constexpr auto unique_algo = T{};
   static auto UNIQUE_SUBSETS = create_min_sample();
 
@@ -107,7 +111,14 @@ TEST_CASE_TEMPLATE("unique", T, decltype(tb::unique),
 
   static auto constexpr N_REPEATS = 4uz;
 
-  auto subsets = create_subsets(N_REPEATS);
+  auto const subsets = create_subsets(N_REPEATS);
+  auto const unique_subsets = [&] {
+    auto dst = unique_algo(subsets);
+    std::ranges::sort(dst);
+
+    return dst;
+  }();
+
   REQUIRE_EQ(subsets.size(), N_REPEATS * UNIQUE_SUBSETS.size());
-  REQUIRE_EQ(unique_algo(subsets).size(), UNIQUE_SUBSETS.size());
+  REQUIRE_EQ(unique_subsets, UNIQUE_SUBSETS);
 }
